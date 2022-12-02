@@ -1,0 +1,555 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище VKR_SkladModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dolwnost">
+          <Key>
+            <PropertyRef Name="Kod_dolwnosti" />
+          </Key>
+          <Property Name="Kod_dolwnosti" Type="int" Nullable="false" />
+          <Property Name="Nazvanie" Type="nvarchar" MaxLength="200" />
+          <Property Name="Oklad" Type="nvarchar" MaxLength="200" />
+          <Property Name="Dolwnostnii_obiazannosti" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Proizvoditel">
+          <Key>
+            <PropertyRef Name="Kod_proizvoditelia" />
+          </Key>
+          <Property Name="Kod_proizvoditelia" Type="int" Nullable="false" />
+          <Property Name="Nazvanie_kompanii" Type="nvarchar" MaxLength="200" />
+          <Property Name="Adres" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="Nomer_sklada" />
+          </Key>
+          <Property Name="Nomer_sklada" Type="int" Nullable="false" />
+          <Property Name="Nazvanie" Type="nvarchar" MaxLength="200" />
+          <Property Name="Uslovie_xranenia" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Sotrudnik">
+          <Key>
+            <PropertyRef Name="ID_sotrudnika" />
+          </Key>
+          <Property Name="ID_sotrudnika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Wamilia" Type="nvarchar" MaxLength="200" />
+          <Property Name="Imia" Type="nvarchar" MaxLength="200" />
+          <Property Name="Otwewto" Type="nvarchar" MaxLength="200" />
+          <Property Name="Passportnii_dannie" Type="nvarchar" MaxLength="200" />
+          <Property Name="Nomer_telewona" Type="nvarchar" MaxLength="200" />
+          <Property Name="Adres" Type="nvarchar" MaxLength="400" />
+          <Property Name="Login" Type="nvarchar" MaxLength="200" />
+          <Property Name="Parol" Type="nvarchar" MaxLength="200" />
+          <Property Name="Dolwnost" Type="int" />
+          <Property Name="Pol" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tovar">
+          <Key>
+            <PropertyRef Name="Kod_tovara" />
+          </Key>
+          <Property Name="Kod_tovara" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazvanie" Type="nvarchar" MaxLength="200" />
+          <Property Name="Kolitewto_upakowok" Type="nvarchar" MaxLength="200" />
+          <Property Name="Thena_za_upakowku" Type="int" />
+          <Property Name="Tip_sklada" Type="int" />
+          <Property Name="Proizvoditel" Type="int" />
+          <Property Name="Postawsik" Type="nvarchar" MaxLength="200" />
+          <Property Name="Srok_xranenia" Type="nvarchar" MaxLength="200" />
+          <Property Name="Uslovia_xranenia" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Zakaz">
+          <Key>
+            <PropertyRef Name="Nomer_zakaza" />
+          </Key>
+          <Property Name="Nomer_zakaza" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Klient" Type="nvarchar" MaxLength="200" />
+          <Property Name="Kplitewto_upakowok" Type="nvarchar" MaxLength="200" />
+          <Property Name="Ves" Type="nvarchar" MaxLength="200" />
+          <Property Name="Data_dostavki" Type="datetime" />
+          <Property Name="Adres_dostavki" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sotrudniki" Type="int" />
+          <Property Name="Nakladnaia" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Zakaz/Tovar">
+          <Key>
+            <PropertyRef Name="Kod" />
+          </Key>
+          <Property Name="Kod" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Kod_tovara" Type="int" />
+          <Property Name="Kod_zakaza" Type="int" />
+        </EntityType>
+        <Association Name="FK_Sotrudnik_Dolwnost">
+          <End Role="Dolwnost" Type="Self.Dolwnost" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Sotrudnik" Type="Self.Sotrudnik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dolwnost">
+              <PropertyRef Name="Kod_dolwnosti" />
+            </Principal>
+            <Dependent Role="Sotrudnik">
+              <PropertyRef Name="Dolwnost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tovar_Proizvoditel">
+          <End Role="Proizvoditel" Type="Self.Proizvoditel" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tovar" Type="Self.Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proizvoditel">
+              <PropertyRef Name="Kod_proizvoditelia" />
+            </Principal>
+            <Dependent Role="Tovar">
+              <PropertyRef Name="Proizvoditel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tovar_Sklad">
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Tovar" Type="Self.Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="Nomer_sklada" />
+            </Principal>
+            <Dependent Role="Tovar">
+              <PropertyRef Name="Tip_sklada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz/Tovar_Tovar">
+          <End Role="Tovar" Type="Self.Tovar" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Zakaz/Tovar" Type="Self.Zakaz/Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovar">
+              <PropertyRef Name="Kod_tovara" />
+            </Principal>
+            <Dependent Role="Zakaz/Tovar">
+              <PropertyRef Name="Kod_tovara" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz/Tovar_Zakaz">
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Zakaz/Tovar" Type="Self.Zakaz/Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zakaz">
+              <PropertyRef Name="Nomer_zakaza" />
+            </Principal>
+            <Dependent Role="Zakaz/Tovar">
+              <PropertyRef Name="Kod_zakaza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Sotrudnik">
+          <End Role="Sotrudnik" Type="Self.Sotrudnik" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sotrudnik">
+              <PropertyRef Name="ID_sotrudnika" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="Sotrudniki" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище VKR_SkladModelContainer">
+          <EntitySet Name="Dolwnost" EntityType="Self.Dolwnost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proizvoditel" EntityType="Self.Proizvoditel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sotrudnik" EntityType="Self.Sotrudnik" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tovar" EntityType="Self.Tovar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zakaz" EntityType="Self.Zakaz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zakaz/Tovar" EntityType="Self.Zakaz/Tovar" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Sotrudnik_Dolwnost" Association="Self.FK_Sotrudnik_Dolwnost">
+            <End Role="Dolwnost" EntitySet="Dolwnost" />
+            <End Role="Sotrudnik" EntitySet="Sotrudnik" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tovar_Proizvoditel" Association="Self.FK_Tovar_Proizvoditel">
+            <End Role="Proizvoditel" EntitySet="Proizvoditel" />
+            <End Role="Tovar" EntitySet="Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tovar_Sklad" Association="Self.FK_Tovar_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Tovar" EntitySet="Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz/Tovar_Tovar" Association="Self.FK_Zakaz/Tovar_Tovar">
+            <End Role="Tovar" EntitySet="Tovar" />
+            <End Role="Zakaz/Tovar" EntitySet="Zakaz/Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz/Tovar_Zakaz" Association="Self.FK_Zakaz/Tovar_Zakaz">
+            <End Role="Zakaz" EntitySet="Zakaz" />
+            <End Role="Zakaz/Tovar" EntitySet="Zakaz/Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Sotrudnik" Association="Self.FK_Zakaz_Sotrudnik">
+            <End Role="Sotrudnik" EntitySet="Sotrudnik" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VKR_SkladModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="VKR_SkladEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dolwnost" EntityType="VKR_SkladModel.Dolwnost" />
+          <EntitySet Name="Proizvoditel" EntityType="VKR_SkladModel.Proizvoditel" />
+          <EntitySet Name="Sklad" EntityType="VKR_SkladModel.Sklad" />
+          <EntitySet Name="Sotrudnik" EntityType="VKR_SkladModel.Sotrudnik" />
+          <EntitySet Name="sysdiagrams" EntityType="VKR_SkladModel.sysdiagrams" />
+          <EntitySet Name="Tovar" EntityType="VKR_SkladModel.Tovar" />
+          <EntitySet Name="Zakaz" EntityType="VKR_SkladModel.Zakaz" />
+          <EntitySet Name="Zakaz_Tovar" EntityType="VKR_SkladModel.Zakaz_Tovar" />
+          <AssociationSet Name="FK_Sotrudnik_Dolwnost" Association="VKR_SkladModel.FK_Sotrudnik_Dolwnost">
+            <End Role="Dolwnost" EntitySet="Dolwnost" />
+            <End Role="Sotrudnik" EntitySet="Sotrudnik" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tovar_Proizvoditel" Association="VKR_SkladModel.FK_Tovar_Proizvoditel">
+            <End Role="Proizvoditel" EntitySet="Proizvoditel" />
+            <End Role="Tovar" EntitySet="Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tovar_Sklad" Association="VKR_SkladModel.FK_Tovar_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Tovar" EntitySet="Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Sotrudnik" Association="VKR_SkladModel.FK_Zakaz_Sotrudnik">
+            <End Role="Sotrudnik" EntitySet="Sotrudnik" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Tovar_Tovar" Association="VKR_SkladModel.FK_Zakaz_Tovar_Tovar">
+            <End Role="Tovar" EntitySet="Tovar" />
+            <End Role="Zakaz_Tovar" EntitySet="Zakaz_Tovar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Tovar_Zakaz" Association="VKR_SkladModel.FK_Zakaz_Tovar_Zakaz">
+            <End Role="Zakaz" EntitySet="Zakaz" />
+            <End Role="Zakaz_Tovar" EntitySet="Zakaz_Tovar" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Dolwnost">
+          <Key>
+            <PropertyRef Name="Kod_dolwnosti" />
+          </Key>
+          <Property Name="Kod_dolwnosti" Type="Int32" Nullable="false" />
+          <Property Name="Nazvanie" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Oklad" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Dolwnostnii_obiazannosti" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sotrudnik" Relationship="VKR_SkladModel.FK_Sotrudnik_Dolwnost" FromRole="Dolwnost" ToRole="Sotrudnik" />
+        </EntityType>
+        <EntityType Name="Proizvoditel">
+          <Key>
+            <PropertyRef Name="Kod_proizvoditelia" />
+          </Key>
+          <Property Name="Kod_proizvoditelia" Type="Int32" Nullable="false" />
+          <Property Name="Nazvanie_kompanii" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Adres" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tovar" Relationship="VKR_SkladModel.FK_Tovar_Proizvoditel" FromRole="Proizvoditel" ToRole="Tovar" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="Nomer_sklada" />
+          </Key>
+          <Property Name="Nomer_sklada" Type="Int32" Nullable="false" />
+          <Property Name="Nazvanie" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Uslovie_xranenia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tovar" Relationship="VKR_SkladModel.FK_Tovar_Sklad" FromRole="Sklad" ToRole="Tovar" />
+        </EntityType>
+        <EntityType Name="Sotrudnik">
+          <Key>
+            <PropertyRef Name="ID_sotrudnika" />
+          </Key>
+          <Property Name="ID_sotrudnika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Wamilia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Imia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Otwewto" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Passportnii_dannie" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Nomer_telewona" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Adres" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Parol" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Dolwnost" Type="Int32" />
+          <Property Name="Pol" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Dolwnost1" Relationship="VKR_SkladModel.FK_Sotrudnik_Dolwnost" FromRole="Sotrudnik" ToRole="Dolwnost" />
+          <NavigationProperty Name="Zakaz" Relationship="VKR_SkladModel.FK_Zakaz_Sotrudnik" FromRole="Sotrudnik" ToRole="Zakaz" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tovar">
+          <Key>
+            <PropertyRef Name="Kod_tovara" />
+          </Key>
+          <Property Name="Kod_tovara" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazvanie" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Kolitewto_upakowok" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Thena_za_upakowku" Type="Int32" />
+          <Property Name="Tip_sklada" Type="Int32" />
+          <Property Name="Proizvoditel" Type="Int32" />
+          <Property Name="Postawsik" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Srok_xranenia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Uslovia_xranenia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Proizvoditel1" Relationship="VKR_SkladModel.FK_Tovar_Proizvoditel" FromRole="Tovar" ToRole="Proizvoditel" />
+          <NavigationProperty Name="Sklad" Relationship="VKR_SkladModel.FK_Tovar_Sklad" FromRole="Tovar" ToRole="Sklad" />
+          <NavigationProperty Name="Zakaz_Tovar" Relationship="VKR_SkladModel.FK_Zakaz_Tovar_Tovar" FromRole="Tovar" ToRole="Zakaz_Tovar" />
+        </EntityType>
+        <EntityType Name="Zakaz">
+          <Key>
+            <PropertyRef Name="Nomer_zakaza" />
+          </Key>
+          <Property Name="Nomer_zakaza" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Klient" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Kplitewto_upakowok" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Ves" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Data_dostavki" Type="DateTime" Precision="3" />
+          <Property Name="Adres_dostavki" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sotrudniki" Type="Int32" />
+          <Property Name="Nakladnaia" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sotrudnik" Relationship="VKR_SkladModel.FK_Zakaz_Sotrudnik" FromRole="Zakaz" ToRole="Sotrudnik" />
+          <NavigationProperty Name="Zakaz_Tovar" Relationship="VKR_SkladModel.FK_Zakaz_Tovar_Zakaz" FromRole="Zakaz" ToRole="Zakaz_Tovar" />
+        </EntityType>
+        <EntityType Name="Zakaz_Tovar">
+          <Key>
+            <PropertyRef Name="Kod" />
+          </Key>
+          <Property Name="Kod" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kod_tovara" Type="Int32" />
+          <Property Name="Kod_zakaza" Type="Int32" />
+          <NavigationProperty Name="Tovar" Relationship="VKR_SkladModel.FK_Zakaz_Tovar_Tovar" FromRole="Zakaz_Tovar" ToRole="Tovar" />
+          <NavigationProperty Name="Zakaz" Relationship="VKR_SkladModel.FK_Zakaz_Tovar_Zakaz" FromRole="Zakaz_Tovar" ToRole="Zakaz" />
+        </EntityType>
+        <Association Name="FK_Sotrudnik_Dolwnost">
+          <End Type="VKR_SkladModel.Dolwnost" Role="Dolwnost" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Sotrudnik" Role="Sotrudnik" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dolwnost">
+              <PropertyRef Name="Kod_dolwnosti" />
+            </Principal>
+            <Dependent Role="Sotrudnik">
+              <PropertyRef Name="Dolwnost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tovar_Proizvoditel">
+          <End Type="VKR_SkladModel.Proizvoditel" Role="Proizvoditel" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Tovar" Role="Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proizvoditel">
+              <PropertyRef Name="Kod_proizvoditelia" />
+            </Principal>
+            <Dependent Role="Tovar">
+              <PropertyRef Name="Proizvoditel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tovar_Sklad">
+          <End Type="VKR_SkladModel.Sklad" Role="Sklad" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Tovar" Role="Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="Nomer_sklada" />
+            </Principal>
+            <Dependent Role="Tovar">
+              <PropertyRef Name="Tip_sklada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Sotrudnik">
+          <End Type="VKR_SkladModel.Sotrudnik" Role="Sotrudnik" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Zakaz" Role="Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sotrudnik">
+              <PropertyRef Name="ID_sotrudnika" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="Sotrudniki" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Tovar_Tovar">
+          <End Type="VKR_SkladModel.Tovar" Role="Tovar" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Zakaz_Tovar" Role="Zakaz_Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tovar">
+              <PropertyRef Name="Kod_tovara" />
+            </Principal>
+            <Dependent Role="Zakaz_Tovar">
+              <PropertyRef Name="Kod_tovara" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Tovar_Zakaz">
+          <End Type="VKR_SkladModel.Zakaz" Role="Zakaz" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VKR_SkladModel.Zakaz_Tovar" Role="Zakaz_Tovar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Zakaz">
+              <PropertyRef Name="Nomer_zakaza" />
+            </Principal>
+            <Dependent Role="Zakaz_Tovar">
+              <PropertyRef Name="Kod_zakaza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище VKR_SkladModelContainer" CdmEntityContainer="VKR_SkladEntities">
+          <EntitySetMapping Name="Dolwnost">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Dolwnost">
+              <MappingFragment StoreEntitySet="Dolwnost">
+                <ScalarProperty Name="Dolwnostnii_obiazannosti" ColumnName="Dolwnostnii_obiazannosti" />
+                <ScalarProperty Name="Oklad" ColumnName="Oklad" />
+                <ScalarProperty Name="Nazvanie" ColumnName="Nazvanie" />
+                <ScalarProperty Name="Kod_dolwnosti" ColumnName="Kod_dolwnosti" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proizvoditel">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Proizvoditel">
+              <MappingFragment StoreEntitySet="Proizvoditel">
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Nazvanie_kompanii" ColumnName="Nazvanie_kompanii" />
+                <ScalarProperty Name="Kod_proizvoditelia" ColumnName="Kod_proizvoditelia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sklad">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Sklad">
+              <MappingFragment StoreEntitySet="Sklad">
+                <ScalarProperty Name="Uslovie_xranenia" ColumnName="Uslovie_xranenia" />
+                <ScalarProperty Name="Nazvanie" ColumnName="Nazvanie" />
+                <ScalarProperty Name="Nomer_sklada" ColumnName="Nomer_sklada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sotrudnik">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Sotrudnik">
+              <MappingFragment StoreEntitySet="Sotrudnik">
+                <ScalarProperty Name="Pol" ColumnName="Pol" />
+                <ScalarProperty Name="Dolwnost" ColumnName="Dolwnost" />
+                <ScalarProperty Name="Parol" ColumnName="Parol" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Nomer_telewona" ColumnName="Nomer_telewona" />
+                <ScalarProperty Name="Passportnii_dannie" ColumnName="Passportnii_dannie" />
+                <ScalarProperty Name="Otwewto" ColumnName="Otwewto" />
+                <ScalarProperty Name="Imia" ColumnName="Imia" />
+                <ScalarProperty Name="Wamilia" ColumnName="Wamilia" />
+                <ScalarProperty Name="ID_sotrudnika" ColumnName="ID_sotrudnika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="VKR_SkladModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tovar">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Tovar">
+              <MappingFragment StoreEntitySet="Tovar">
+                <ScalarProperty Name="Uslovia_xranenia" ColumnName="Uslovia_xranenia" />
+                <ScalarProperty Name="Srok_xranenia" ColumnName="Srok_xranenia" />
+                <ScalarProperty Name="Postawsik" ColumnName="Postawsik" />
+                <ScalarProperty Name="Proizvoditel" ColumnName="Proizvoditel" />
+                <ScalarProperty Name="Tip_sklada" ColumnName="Tip_sklada" />
+                <ScalarProperty Name="Thena_za_upakowku" ColumnName="Thena_za_upakowku" />
+                <ScalarProperty Name="Kolitewto_upakowok" ColumnName="Kolitewto_upakowok" />
+                <ScalarProperty Name="Nazvanie" ColumnName="Nazvanie" />
+                <ScalarProperty Name="Kod_tovara" ColumnName="Kod_tovara" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zakaz">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Zakaz">
+              <MappingFragment StoreEntitySet="Zakaz">
+                <ScalarProperty Name="Nakladnaia" ColumnName="Nakladnaia" />
+                <ScalarProperty Name="Sotrudniki" ColumnName="Sotrudniki" />
+                <ScalarProperty Name="Adres_dostavki" ColumnName="Adres_dostavki" />
+                <ScalarProperty Name="Data_dostavki" ColumnName="Data_dostavki" />
+                <ScalarProperty Name="Ves" ColumnName="Ves" />
+                <ScalarProperty Name="Kplitewto_upakowok" ColumnName="Kplitewto_upakowok" />
+                <ScalarProperty Name="Klient" ColumnName="Klient" />
+                <ScalarProperty Name="Nomer_zakaza" ColumnName="Nomer_zakaza" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zakaz_Tovar">
+            <EntityTypeMapping TypeName="VKR_SkladModel.Zakaz_Tovar">
+              <MappingFragment StoreEntitySet="Zakaz/Tovar">
+                <ScalarProperty Name="Kod_zakaza" ColumnName="Kod_zakaza" />
+                <ScalarProperty Name="Kod_tovara" ColumnName="Kod_tovara" />
+                <ScalarProperty Name="Kod" ColumnName="Kod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
